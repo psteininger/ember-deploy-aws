@@ -9,3 +9,13 @@ variable "cloudflare_api_token" {
 variable "github_token" {
   type = "string"
 }
+
+variable "name" {
+  type = "string"
+  default = "app"
+}
+
+locals {
+  env_suffix = "${terraform.workspace == "production" ? "" : join("", list("-", terraform.workspace))}"
+  name = "${var.name}${local.env_suffix}"
+}
