@@ -101,3 +101,11 @@ resource "aws_cloudfront_distribution" "frontend" {
     Environment = "${terraform.workspace}"
   }
 }
+
+resource "cloudflare_record" "frontend-dns" {
+  domain  = "${var.s3-tld}"
+  name    = "${var.name}"
+  type    = "CNAME"
+  value   = "${aws_cloudfront_distribution.frontend.domain_name}"
+  proxied = true
+}
