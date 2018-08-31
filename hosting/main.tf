@@ -33,3 +33,8 @@ resource "aws_s3_bucket" "frontend" {
     Environment = "${terraform.workspace}"
   }
 }
+resource "aws_s3_bucket_policy" "frontend" {
+  bucket = "${aws_s3_bucket.frontend.id}"
+  policy = "${data.aws_iam_policy_document.bucket_policy.json}"
+}
+
