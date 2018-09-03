@@ -75,3 +75,6 @@ data "aws_iam_policy_document" "ci-access" {
     ]
   }
 }
+data "github_repository" "app-repo" {
+  full_name = "${var.app_repo}"
+}
