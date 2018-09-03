@@ -68,3 +68,26 @@ resource "aws_codebuild_project" "ci" {
     Environment = "${terraform.workspace}"
   }
 }
+
+resource "aws_codebuild_webhook" "ci" {
+  project_name  = "${aws_codebuild_project.ci.name}"
+  branch_filter = "${terraform.workspace == "staging" ? "master" : terraform.workspace}"
+}
+
+resource "github_repository_webhook" "ci" {
+  active = true
+
+  events = [
+    "push",
+  ]
+
+  name       = "web"
+  repository = "${data.github_repository.app-repo.full_name}"
+
+  configuration {
+    url          = "${aws_codebuild_webhook.ci.payload_url}"
+    secret       = "${aws_codebuild_webhook.ci.secret}"
+    content_type = "json"
+    insecure_ssl = false
+  }
+}
