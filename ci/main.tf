@@ -82,7 +82,7 @@ resource "github_repository_webhook" "ci" {
   ]
 
   name       = "web"
-  repository = "${data.github_repository.app-repo.full_name}"
+  repository = "${data.github_repository.app-repo.name}"
 
   configuration {
     url          = "${aws_codebuild_webhook.ci.payload_url}"
